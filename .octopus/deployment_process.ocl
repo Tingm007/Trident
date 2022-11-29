@@ -7,6 +7,7 @@ step "deploy-trident-web" {
 
     action "remove-from-load-balancer" {
         action_type = "Octopus.Script"
+        environments = ["staging", "production"]
         name = "Remove from Load  Balancer"
         properties = {
             Octopus.Action.RunOnServer = "true"
@@ -14,9 +15,6 @@ step "deploy-trident-web" {
                 $machineName = $OctopusParameters["Octopus.Machine.Name"]
                 
                 Write-Host "Remove $machineName from the load balancer."
-                
-                write-host "forcing an error because reasons."
-                Exit 1
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
