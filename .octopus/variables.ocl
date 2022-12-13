@@ -12,7 +12,7 @@ variable "Project.Database.Name" {
         environment = ["production"]
     }
 
-    value "#{Octopus.Environment.Name}" {
+    value "Trident_#{Octopus.Environment.Name}" {
         environment = ["development", "qa", "staging"]
     }
 }
