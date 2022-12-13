@@ -22,3 +22,7 @@ variable "Project.Database.Server.Name" {
         description = ""
     }
 }
+
+variable "Project.Database.Report.Path" {
+    value "C:\\DatabaseReports\\#{Octopus.Environment.Name}" {}
+}
