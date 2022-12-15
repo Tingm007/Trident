@@ -104,7 +104,7 @@ step "approve-database-delta-script" {
     condition = "Variable"
     name = "Approve Database Delta Script"
     properties = {
-        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Deployment.Error == \"\"}#{Project.Database.ApprovalRequired}#{/if}"
+        Octopus.Step.ConditionVariableExpression = "#{unless Octopus.Deployment.Error}#{Octopus.Action[Calculate Deployment Mode].Output.RunOnDeploy}#{/unless}"
     }
 
     action {
