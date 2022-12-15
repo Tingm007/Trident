@@ -255,6 +255,7 @@ step "verify-trident-application" {
 
     action {
         action_type = "Octopus.Manual"
+        channels = ["hotfix"]
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Please Verify the Trident Application"
