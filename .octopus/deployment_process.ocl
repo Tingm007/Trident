@@ -100,6 +100,21 @@ step "auto-approve-database-delta-script" {
     }
 }
 
+step "enable-maintenance-mode" {
+    name = "Enable Maintenance Mode"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Enable Maintenance Mode\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "default-worker-pool-1"
+    }
+}
+
 step "approve-database-delta-script" {
     condition = "Variable"
     name = "Approve Database Delta Script"
@@ -184,6 +199,36 @@ step "deploy-trident-web" {
     }
 }
 
+step "verify-trident-application" {
+    name = "Verify Trident Application"
+
+    action {
+        action_type = "Octopus.Manual"
+        channels = ["hotfix"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Please Verify the Trident Application"
+            Octopus.Action.Manual.ResponsibleTeamIds = "qa,developers,global/octopus-managers"
+        }
+        worker_pool_variable = ""
+    }
+}
+
+step "disable-maintenance-mode" {
+    name = "Disable Maintenance Mode"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Disable Maintenance Mode\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "default-worker-pool-1"
+    }
+}
+
 step "notify-developers-of-status" {
     condition = "Always"
     name = "Notify Developers of Status"
@@ -217,50 +262,5 @@ step "send-slack-message-on-failure" {
             ssn_Username = "Trident Project in Octopus Deploy"
         }
         worker_pool = "default-worker-pool-1"
-    }
-}
-
-step "enable-maintenance-mode" {
-    name = "Enable Maintenance Mode"
-
-    action {
-        action_type = "Octopus.Script"
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Enable Maintenance Mode\""
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "default-worker-pool-1"
-    }
-}
-
-step "disable-maintenance-mode" {
-    name = "Disable Maintenance Mode"
-
-    action {
-        action_type = "Octopus.Script"
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Disable Maintenance Mode\""
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "default-worker-pool-1"
-    }
-}
-
-step "verify-trident-application" {
-    name = "Verify Trident Application"
-
-    action {
-        action_type = "Octopus.Manual"
-        channels = ["hotfix"]
-        properties = {
-            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
-            Octopus.Action.Manual.Instructions = "Please Verify the Trident Application"
-            Octopus.Action.Manual.ResponsibleTeamIds = "qa,developers,global/octopus-managers"
-        }
-        worker_pool_variable = ""
     }
 }
