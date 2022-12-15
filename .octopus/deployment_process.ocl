@@ -157,10 +157,12 @@ step "deploy-the-database-changes" {
 }
 
 step "deploy-trident-web" {
+    condition = "Variable"
     name = "Deploy Trident Website"
     properties = {
         Octopus.Action.MaxParallelism = "1"
         Octopus.Action.TargetRoles = "trident-web"
+        Octopus.Step.ConditionVariableExpression = "#{unless Octopus.Deployment.Error}#{Octopus.Action[Calculate Deployment Mode].Output.RunOnDeploy}#{/unless}"
     }
 
     action "remove-from-load-balancer" {
