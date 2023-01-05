@@ -11,7 +11,7 @@ variable "Project.Database.Name" {
         environment = ["development", "qa", "staging"]
     }
 
-    value "Trident" {
+    value "Trident_#{Retail.Tenant.ShortName}" {
         description = ""
         environment = ["production"]
     }
